@@ -1,5 +1,11 @@
 const {createApp} = Vue;
+const { defineRule, Form, Field, ErrorMessage, configure } = VeeValidate;
+const { required, email, min, max } = VeeValidateRules;
 
+defineRule('required', required);
+defineRule('email', email);
+defineRule('min', min);
+defineRule('max', max);
 
 const apiUrl = 'https://vue3-course-api.hexschool.io/v2';
 const apiPath = 'pororo03-api';
@@ -46,6 +52,8 @@ const app = createApp({
       productId:'',
       cart:{},
       loadingItem: '',
+      isLoading:true,
+      fullPage:true
     };
   },
   methods: {
@@ -54,6 +62,7 @@ const app = createApp({
       .then(res =>{
         console.log(res);
         this.products = res.data.products
+        setTimeout(() => this.isLoading = false, 800)
       })
     },
     openModal(id){
@@ -109,6 +118,24 @@ const app = createApp({
         this.getCarts();
       })
     },
+    onSubmit(values){
+      const data = {
+          "user": {
+            "name": values['姓名'],
+            "email": values['email'],
+            "tel": values['電話'],
+            "address": values['地址']
+          },
+          "message": values['留言'] ? values['留言'] : ''
+      }
+
+      axios.post(`${apiUrl}/api/${apiPath}/order`, {data})
+      .then(res => {
+        this.getCarts();
+        
+        alert(`成功建立訂單，訂單編號：${res.data.orderId}`)
+      })
+    },
   },
   components:{
     prodcutModal,
@@ -118,7 +145,11 @@ const app = createApp({
     this.getCarts();
   },
 });
-
+app.use(VueLoading.LoadingPlugin);
+app.component('loading', VueLoading.Component);
+app.component('VForm', VeeValidate.Form);
+app.component('VField', VeeValidate.Field);
+app.component('ErrorMessage', VeeValidate.ErrorMessage);
 app.mount('#app');
 
 

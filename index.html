@@ -11,10 +11,12 @@
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css'
           integrity='sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw=='
           crossorigin='anonymous' />
+    <link href="https://cdn.jsdelivr.net/npm/vue-loading-overlay@6/dist/css/index.css" rel="stylesheet">
   </head>
 
   <body>
     <div id="app">
+      <loading  v-model:active="isLoading" :is-full-page="fullPage"></loading>
       <div class="container">
         <div class="mt-4">
           <!-- 產品Modal -->
@@ -132,11 +134,11 @@
             </tfoot>
           </table>
         </div>
-        <!-- <div class="my-5 row justify-content-center">
-          <v-form ref="form" class="col-md-6" v-slot="{ errors }" >
+        <div class="my-5 row justify-content-center">
+          <v-form ref="form" class="col-md-6" v-slot="{ errors }" @submit ="onSubmit" >
             <div class="mb-3">
               <label for="email" class="form-label">Email</label>
-              <v-field id="email" name="email" type="email" class="form-control"
+              <v-field id="email" name="email" type="email" class="form-control" rules="required|email"
                        :class="{ 'is-invalid': errors['email'] }" placeholder="請輸入 Email" 
                       ></v-field>
               <error-message name="email" class="invalid-feedback"></error-message>
@@ -165,14 +167,14 @@
 
             <div class="mb-3">
               <label for="message" class="form-label">留言</label>
-              <textarea id="message" class="form-control" cols="30" rows="10" ></textarea>
+              <textarea id="message" name="留言" class="form-control" cols="30" rows="10" ></textarea>
             </div>
             <div class="text-end">
               <button type="submit" class="btn btn-danger"
                       >送出訂單</button>
             </div>
           </v-form>
-        </div> -->
+        </div>
       </div>
     </div>
     <script type="text/x-template" id="userProductModal">
@@ -230,6 +232,7 @@
     <script src="https://unpkg.com/vee-validate@next"></script>
     <script src="https://unpkg.com/@vee-validate/i18n@4.1.0"></script>
     <script src="https://unpkg.com/@vee-validate/rules"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-loading-overlay@6"></script>
     <script src="./app.js" type="module"></script>
   </body>
 
